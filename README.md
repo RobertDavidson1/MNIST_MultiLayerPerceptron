@@ -13,10 +13,10 @@ This repository contains a project for my Linear Algebra college module (MA2283)
 ## Project Components
 
 - **Model Training (`train_model.py`):**  
-  Trains an MLP on the MNIST dataset. It normalizes image data, one-hot encodes labels, and builds a network with two hidden layers. The trained model is saved as `mnist_mlp.h5`.
+  Trains an MLP on the MNIST dataset. The trained model is saved as `mnist_mlp.h5`.
 
 - **Web Application (`app.py`):**  
-  A Flask app that serves an interactive web page. Users can draw a digit on an HTML canvas, which is preprocessed and sent to the trained model for prediction. The prediction probabilities are then displayed on the interface.
+  A Flask app that serves an interactive web page. Users can draw a digit on an HTML canvas, which is preprocessed and sent to the trained model for prediction. The prediction is then displayed on the interface.
 
 - **Front-End (`script.js` & `style.css`):**
 
@@ -24,7 +24,7 @@ This repository contains a project for my Linear Algebra college module (MA2283)
   - `style.css`: Provides styling for the user interface.
 
 - **Project Write-Up (`writeup.tex`):**  
-  A comprehensive LaTeX document that details the mathematical derivation of the perceptron and multilayer perceptron, covering key concepts such as vector operations, activation functions, error backpropagation, and optimization techniques. This write-up bridges theory with practical implementation.
+  A comprehensive LaTeX document that details the mathematical derivation of the perceptron and multilayer perceptron. The aim is to derive the mathematics behind the multilayer perceptron, in a simple yet rigorous manner from complete basics.
 
 - **Dependencies (`requirements.txt`):**  
   Lists required libraries including Flask, TensorFlow, and NumPy.
@@ -50,7 +50,9 @@ This repository contains a project for my Linear Algebra college module (MA2283)
 
 ### Training the Model
 
-(Optional) Before running the web app, you could train the model on your own architecture, I've used a simple architecture for this demonstration
+(Optional) Before running the web app, you could train the model on your own architecture, I've used a simple architecture for this demonstration.
+
+If you dont want to use your own architechture you can skip to the next step
 
 ```bash
 python train_model.py
