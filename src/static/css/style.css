@@ -1,0 +1,184 @@
+/* Global styles */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: "Anonymous Pro", monospace;
+  background-color: #f4f4f4;
+  color: #000;
+  /* padding: 20px; */
+}
+
+/* Top bar */
+header {
+  background-color: rgb(232, 232, 232);
+  /* header background */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  position: relative;
+  z-index: 10;
+  margin-bottom: 100px;
+}
+
+header .title-left {
+  font-weight: 700;
+  /* Bold */
+  font-size: 1.3rem;
+}
+
+header .title-center {
+  font-weight: 400;
+  /* Normal */
+  font-size: 1.3rem;
+  letter-spacing: 20%;
+}
+
+header .circle {
+  width: 1.3em;
+  height: 1.3em;
+  background-color: #e74c3c;
+
+  border-radius: 50%;
+}
+
+/* Main container: two-column layout */
+
+.main-container {
+  display: flex;
+  flex-wrap: wrap;
+  /* Allows wrapping on smaller screens */
+  gap: 20px;
+  max-width: 900px;
+  /* Constrains the overall width */
+  margin: 0 auto;
+  /* Centers the container horizontally */
+  justify-content: center;
+  align-items: stretch;
+  /* Updated: ensures both sections are the same height */
+}
+
+/* Left section: "Draw a digit" */
+.left-section {
+  background-color: #ffffff;
+  flex: 1;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  min-height: 300px;
+  /* for demo, adjust as needed */
+}
+
+.left-section h2 {
+  font-weight: 700;
+  margin-bottom: 0px;
+}
+
+.draw-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 10px;
+}
+.clear-button {
+  margin-left: auto;
+  background-color: #ef5e3a;
+  /* orange-ish color */
+  color: #fff;
+  border: none;
+  padding: 8px 16px;
+  font-family: "Anonymous Pro", monospace;
+  font-weight: 700;
+  cursor: pointer;
+  border-radius: 40px;
+}
+
+/* A placeholder area for drawing */
+.draw-canvas {
+  margin-top: 10px;
+  background-color: #fafafa;
+  border: 2px dashed #ccc;
+  min-width: 504px;
+  min-height: 504px;
+  flex: 1;
+}
+
+/* Right section: "Prediction" and two buttons */
+.right-section {
+  flex: 1;
+  /* narrower than left side, adjust as needed */
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  min-height: 100%;
+}
+
+.prediction-box {
+  background-color: #ffffff;
+  flex: 1;
+  padding: 20px;
+  min-height: 400px;
+}
+
+.prediction-box h2 {
+  font-weight: 700;
+}
+
+.predicted-digit {
+  margin-top: 10px;
+  font-size: 15rem;
+  font-weight: 700;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 90%;
+  background-color: #fafafa;
+  color: #2c3e50;
+  transition: opacity 1 ease;
+}
+
+.fade-out {
+  opacity: 0;
+}
+
+/* Buttons: "write up" and "github" */
+.button-group {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: auto;
+}
+
+.btn {
+  background-color: #ffffff;
+  padding: 12px;
+  color: #2c3e50;
+  font-weight: 300;
+  font-family: "Anonymous Pro", monospace;
+  cursor: pointer;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* Make the button grow/shrink vertically if the parent container
+            defines a height (e.g., if .button-group is set to a fixed height) */
+  flex: 1;
+  /* Responsive font size: grows with viewport but remains within limits */
+  font-size: clamp(1rem, 10vw, 2rem);
+  text-decoration: none;
+}
+
+.btn-write-up {
+  border: 10px solid #2c3e50;
+}
+
+.btn-github {
+  border: 10px solid #ef5e3a;
+}

@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>MNIST Digit Recognition</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Anonymous+Pro:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <!-- Link to external CSS -->
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/style.css') }}"
+    />
+  </head>
+
+  <body>
+    <!-- Top Bar -->
+    <header>
+      <div class="title-left">ROBERT DAVIDSON</div>
+      <div class="title-center">MNIST Digit Recognition</div>
+      <div class="circle"></div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="main-container">
+      <!-- Left Section -->
+      <div class="left-section">
+        <div class="draw-header">
+          <h2>Draw a digit</h2>
+          <button class="clear-button" id="clear-button">CLEAR</button>
+        </div>
+
+        <canvas id="draw-canvas"></canvas>
+      </div>
+
+      <!-- Right Section -->
+      <div class="right-section">
+        <div class="prediction-box">
+          <div style="display: flex; width: 100%; align-items: center">
+            <h2 style="margin-right: 20px">Prediction</h2>
+          </div>
+          <div id="predicted-digit" class="predicted-digit"></div>
+        </div>
+        <div class="button-group">
+          <a
+            class="btn btn-write-up"
+            href="{{ url_for('static', filename='writeup.pdf') }}"
+            target="_blank"
+            >write up</a
+          >
+          <a
+            class="btn btn-github"
+            href="https://github.com/RobertDavidson1"
+            target="_blank"
+            >github</a
+          >
+        </div>
+      </div>
+    </div>
+
+    <!-- Link to external JavaScript -->
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/animation.js') }}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.2/p5.js"></script>
+  </body>
+</html>
