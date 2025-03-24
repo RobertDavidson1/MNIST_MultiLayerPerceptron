@@ -44,6 +44,8 @@
 
 
 \begin{center}
+    \boxed{\;\; \emph{Please note this is a work in progress.} \;\;} \\
+    \vspace{0.5cm}
     Mathematical Analysis of Multilayer Perceptron Training\\
     Independent / Self Study\\[24pt]
     \LARGE
@@ -109,7 +111,7 @@ Multilayer Perceptron (MLP) for the MNIST digit recognition task.
 \tableofcontents
 
 \pagebreak
-\section*{Preliminaries}
+\section*{[WIP] Preliminaries}
 Here we will cover some basic mathematical concepts that will be used throughout the paper. These will be derived from first principles, so don't worry if you're not familiar with them.
 
 \subsection*{Vectors}
@@ -146,11 +148,6 @@ The transpose of a vector is used to convert a row vector into a column vector, 
 
 \pagebreak
 
-\subsection*{Multiplying Vectors : The Dot Product}
-Say we have a vector $\mathbf{x} = \left[\begin{smallmatrix} x_1 \\ x_2 \end{smallmatrix}\right]$, we say the dimension of this is $2 \times 1$. In order to multiply $\mathbf{x}$ with another vector we need the vector to be of dimension $1 \times 2$. \\
-Let $\mathbf{v} = \left[\begin{smallmatrix} v_1 \\ v_2 \end{smallmatrix}\right]$. We note that the dimension of $\mathbf{v}$ is $2 \times 1$. We can use the transpose of $v$ to turn it into a $1 \times 2$ vector.\\
-Given two vectors $\mathbf{w}$ and $\mathbf{v}$:
-$$\mathbf{w} = \begin{bmatrix} w_1 \\ w_2 \end{bmatrix} \quad \text{and} \quad \mathbf{v} = \begin{bmatrix} v_1 \\ v_2 \end{bmatrix}$$
 \section{Motivation for the Multilayer Perceptron}
 \begin{minipage}{0.7\textwidth}
     The perceptron is composed of multiple artificial neurons. Each of which makes a simple decision
@@ -348,7 +345,7 @@ We introduce the Heaviside step activation function – which is like an on-off 
     \caption{The Heaviside step function}
 \end{figure} \\
 \textbf{Introducing the bias} $\boldsymbol{(b)}$\\[2ex]
-What is we want to change how much of a total input it takes for a neuron to fire? We can introduce a bias term $b$ to the total input:
+What if we want to change how much of a total input it takes for a neuron to fire? We can introduce a bias term $b$ to the total input:
 $$z = \mathbf{w}^T \mathbf{x} + b$$
 This allows us to shift the total input by an amount $b$. Which makes the activation function look like:
 \begin{figure}[h]
