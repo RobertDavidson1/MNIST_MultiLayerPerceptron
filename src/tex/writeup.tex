@@ -1,15 +1,15 @@
 \documentclass[9pt]{extarticle}
-% -- PACKAGES --
-\usepackage[utf8]{inputenc} % UTF8 encoding
-\usepackage[T1]{fontenc} % T1 font encoding (better for hyphenation, etc.)
-\usepackage{lmodern} % Latin Modern font
-\usepackage[margin=1in]{geometry} % Set margins
-\usepackage{amsmath,amssymb,amsthm} % Math essentials
-\usepackage{graphicx} % For including images
-\usepackage[hidelinks]{hyperref} % Clickable hyperlinks in PDF
-\usepackage{bookmark} % Helps manage bookmarks and outlines properly
-\usepackage{cite} % Better citation handling
-\usepackage[utf8]{inputenc} % Required for inputting international characters
+
+
+\usepackage[T1]{fontenc} 
+\usepackage{lmodern} 
+\usepackage[margin=1in]{geometry} 
+\usepackage{amsmath,amssymb,amsthm} 
+\usepackage{graphicx} 
+\usepackage[hidelinks]{hyperref}
+\usepackage{bookmark} 
+\usepackage{cite}
+\usepackage[utf8]{inputenc} 
 \usepackage{graphicx}
 \usepackage{algorithm}
 \usepackage{algpseudocode}
@@ -22,20 +22,6 @@
 \usepackage{changepage}
 \usetikzlibrary{decorations.pathreplacing, matrix, calc, positioning}
 
-% -- THEOREM ENVIRONMENTS --
-\theoremstyle{plain}
-\newtheorem{theorem}{Theorem}[section]
-\newtheorem{lemma}[theorem]{Lemma}
-
-\theoremstyle{definition}
-\newtheorem{definition}[theorem]{Definition}
-
-\theoremstyle{remark}
-\newtheorem{remark}[theorem]{Remark}
-
-
-
-% -- TITLE & AUTHOR --
 \title{Derivation and Implementation of a Multilayer Perceptron for MNIST Classification}
 \author{Robert Davidson}
 \date{\today}
@@ -158,7 +144,7 @@ The transpose of a vector is used to convert a row vector into a column vector, 
 \begin{minipage}{0.29\textwidth}
     \centering
     \begin{tikzpicture}[
-            scale = 0.2, % reduced scale factor
+            scale = 0.2,
             node distance=1.5cm,
             neuron/.style={circle, draw=black, minimum size=0.2cm},
             input/.style={neuron},
@@ -174,12 +160,12 @@ The transpose of a vector is used to convert a row vector into a column vector, 
 
 
 
-        % Input layer nodes
+       
         \node[input] (I-1) at (0,2) {};
         \node[input] (I-2) at (0,0) {};
 
 
-        % Hidden layer nodes
+     
         \node[hidden] (H-1) at (4,5) {};
         \node[hidden] (H-2) at (4,3) {};
         \node[hidden] (H-3) at (4,1) {};
@@ -187,16 +173,15 @@ The transpose of a vector is used to convert a row vector into a column vector, 
         \node[hidden] (H-5) at (4,-3) {};
 
 
-        % Output layer nodes
+       
         \node[output] (O-1) at (8,2) {};
         \node[output] (O-2) at (8,0) {};
 
-        % Connections between input and hidden layer
+      
         \foreach \i in {1,2}
         \foreach \j in {1,2,3,4,5}
         \draw[-] (I-\i) -- (H-\j);
 
-        % Connections between hidden and output layer
         \foreach \i in {1,2,3,4,5}
         \foreach \j in {1,2}
         \draw[-] (H-\i) -- (O-\j);
@@ -241,39 +226,39 @@ The perceptron, proposed by Frank Rosenblatt in 1958 \cite{rosenblatt_perceptron
         \centering
         \begin{tikzpicture}[>=stealth, node distance=2.5cm, auto]
 
-            % Draw the two input variables and the bias term
+         
             \node[draw, circle, minimum size=0.8cm] (x0) at (0,1.5) {$1$};
             \node[draw, circle, minimum size=0.8cm] (x1) at (0,0) {$x_1$};
             \node[draw, circle, minimum size=0.8cm] (x2) at (0,-1.5) {$x_2$};
 
 
-            % Draw the weights 
+        
             \node[draw, rectangle, minimum size =0.8cm] (w0) at (1.5,1.5) {$b$};
             \node[draw, rectangle, minimum size =0.8cm] (w1) at (1.5,0) {$w_1$};
             \node[draw, rectangle, minimum size =0.8cm] (w2) at (1.5,-1.5) {$w_2$};
 
-            % Draw the summation 
+           
             \node[draw, circle, minimum size=0.8cm] (p) at (3,0) {$\Sigma$};
 
             \node[draw, circle, minimum size=0.8cm] (a) at (4.5,0) {$\phi$};
 
-            % Draw the output 
+          
             \node at (6,0) (y) {$y$};
 
-            % Arrows connecting inputs to weights
+           
             \draw[->] (x0) -- (w0);
             \draw[->] (x1) -- (w1);
             \draw[->] (x2) -- (w2);
 
-            % Arrows connecting weights to summation
+        
             \draw[->] (w0) -- (p);
             \draw[->] (w1) -- (p);
             \draw[->] (w2) -- (p);
 
-            % Arrow connecting summation to activation function
+           
             \draw[->] (p) -- (a);
 
-            % Arrow connecting activation function to output
+            
             \draw[->] (a) -- (y);
 
 
@@ -294,15 +279,14 @@ To represent the artificial neueron, we'll start with an example, two inputs $x_
     \centering
     \begin{tikzpicture}[>=stealth, node distance=2.5cm, auto, scale=0.8]
 
-        % Draw the two input variables and the bias term
+       
 
         \node[draw, circle, minimum size=0.8cm] (x1) at (0,1) {$x_1$};
         \node[draw, circle, minimum size=0.8cm] (x2) at (0,-1) {$x_2$};
 
-        % Draw the summation 
         \node[draw, circle, minimum size=0.8cm] (p) at (3,0) {$h_1$};
 
-        % Arrows connecting inputs to weights
+       
 
         \draw[-] (x1) -- (p) node[midway, sloped, above] {$w_1$};
         \draw[-] (x2) -- (p) node[midway, sloped, below] {$w_2$};
@@ -450,11 +434,11 @@ where, $y = 1$ means the mushroom is poisonous, and $y = 0$ means it is safe to 
     \begin{subfigure}{0.3\textwidth}
         \centering
         \begin{tikzpicture}[scale=0.5]
-            % axes
+           
             \draw[->] (0,0) -- (5,0) node[right] {\scriptsize Num. Spots};
             \draw[->] (0,0) -- (0,5) node[above] {\scriptsize Stem Length};
 
-            % sample points: safe (blue) and poisonous (red)
+         
             \filldraw[blue] (1,1) circle (2pt) node[below] {\scriptsize Safe};
             \filldraw[blue] (2,2) circle (2pt);
             \filldraw[blue] (2.5,1.5) circle (2pt);
@@ -494,11 +478,11 @@ where, $y = 1$ means the mushroom is poisonous, and $y = 0$ means it is safe to 
     \begin{subfigure}{0.3\textwidth}
         \centering
         \begin{tikzpicture}[scale=0.5]
-            % axes
+           
             \draw[->] (0,0) -- (5,0) node[right] {\scriptsize Num. Spots};
             \draw[->] (0,0) -- (0,5) node[above] {\scriptsize Stem Length};
 
-            % sample points: safe (blue) and poisonous (red)
+        
             \filldraw[blue] (1,1) circle (2pt);
             \filldraw[blue] (2,2) circle (2pt);
             \filldraw[blue] (2.5,1.5) circle (2pt);
@@ -538,11 +522,11 @@ where, $y = 1$ means the mushroom is poisonous, and $y = 0$ means it is safe to 
     \begin{subfigure}{0.3\textwidth}
         \centering
         \begin{tikzpicture}[scale=0.5]
-            % axes
+       
             \draw[->] (0,0) -- (5,0) node[right] {\scriptsize Num. Spots};
             \draw[->] (0,0) -- (0,5) node[above] {\scriptsize Stem Length};
 
-            % sample points: safe (blue) and poisonous (red)
+          
             \filldraw[blue] (1,1) circle (2pt);
             \filldraw[blue] (2,2) circle (2pt);
             \filldraw[blue] (2.5,1.5) circle (2pt);
@@ -623,14 +607,14 @@ A single artificial neuron can separate data with only one straight line—great
     \begin{subfigure}[b]{0.45\textwidth}
         \centering
         \begin{tikzpicture}[scale=1.2]
-            % grid lines for clarity
+          
             \draw[dashed, gray] (0,1) -- (1,1);
             \draw[dashed, gray] (1,0) -- (1,1);
-            % axes
+   
             \draw[->] (-0.2,0) -- (1.5,0) node[right] {$\text{Spicy}$};
             \draw[->] (0,-0.2) -- (0,1.5) node[above] {$\text{Sweet}$};
 
-            % points
+          
             \filldraw[blue] (0,0) circle (3pt) node[below left] {\text{No dish}};
             \filldraw[red] (0,1) circle (3pt) node[above left] {\text{Dish}};
             \filldraw[red] (1,0) circle (3pt) node[below right] {\text{Dish}};
@@ -658,17 +642,16 @@ Returning to the chef analogy: the chef might hire two sous-chefs. One sous-chef
                 \node[align=left] at (4,2) {Output \\ \; layer};
                 \node[draw, circle, minimum size=1cm] (Nout) at (4,0) {$N_{\mathrm{out}}$};
 
-                % Connections: inputs to hidden
+        
                 \draw[->] (S) -- (N1);
                 \draw[->] (S) -- (N2);
                 \draw[->] (W) -- (N1);
                 \draw[->] (W) -- (N2);
 
-                % Connections: hidden to output
                 \draw[->] (N1) -- (Nout);
                 \draw[->] (N2) -- (Nout);
 
-                % Label the final output
+            
                 \node[right] at (5,0) {$\hat{y}$};
                 \draw[->] (Nout) -- (5,0);
             \end{tikzpicture}
@@ -678,8 +661,7 @@ Returning to the chef analogy: the chef might hire two sous-chefs. One sous-chef
     \hfill
     \begin{subfigure}[b]{0.5\textwidth}
         \centering
-        \begin{tikzpicture}[scale=1.5]
-            % Define clipping rectangle (limits of our drawing)
+        \begin{tikzpicture}[scale=1.5]  
             \begin{scope}
                 \clip (-0.2,-0.2) rectangle (1.5,1.5);
 
@@ -697,15 +679,14 @@ Returning to the chef analogy: the chef might hire two sous-chefs. One sous-chef
                 (0.5,0.45) -- (1.5,0.2) -- (1.5,-0.2) -- (0.2,-0.2) -- cycle;
             \end{scope}
 
-            % Draw decision boundaries
+           
             \draw[very thick, blue] (0.2,-0.2) -- (1.05,1.5) node[above] {\scriptsize$N_1$};
             \draw[very thick, red] (-0.2,0.54) -- (1.5,0.2) node[right] {\scriptsize$N_2$};
 
-            % Draw axes
+       
             \draw[->] (-0.2,0) -- (1.5,0) node[right, black] {Spicy};
             \draw[->] (0,-0.2) -- (0,1.5) node[above, black] {Sweet};
 
-            % Draw points
             \filldraw[blue] (0,0) circle (2pt) node[below left] {};
             \filldraw[red] (0,1) circle (2pt) node[above left] {};
             \filldraw[red] (1,0) circle (2pt) node[below right] {};
@@ -749,7 +730,6 @@ One way to overcome these limitations is to chain mutliple layers of neuerons so
 
 
 
-            % Input layer nodes
             \node[input] (I-1) at (0,2) {};
             \node[input] (I-2) at (0,1) {};
             \node[input] (I-3) at (0,0) {};
@@ -757,7 +737,6 @@ One way to overcome these limitations is to chain mutliple layers of neuerons so
             \node[input] (I-5) at (0,-2) {};
 
 
-            % Hidden layer nodes
             \node[hidden] (H-11) at (2,1) {};
             \node[hidden] (H-12) at (2,0) {};
             \node[hidden] (H-13) at (2,-1) {};
@@ -770,11 +749,11 @@ One way to overcome these limitations is to chain mutliple layers of neuerons so
             \node[hidden] (H-32) at (6,0) {};
             \node[hidden] (H-33) at (6,-1) {};
 
-            % Output layer nodes
+          
             \node[output] (O-1) at (8,0.5) {};
             \node[output] (O-2) at (8,-0.5) {};
 
-            % Connections between input and hidden layers
+       
             \foreach \i in {1,2,3,4,5}
             \foreach \j in {1,2,3}
             \draw[-] (I-\i) -- (H-1\j);
@@ -787,12 +766,11 @@ One way to overcome these limitations is to chain mutliple layers of neuerons so
             \foreach \j in {1,2,3}
             \draw[-] (H-2\i) -- (H-3\j);
 
-            % Connections between hidden and output layer
+     
             \foreach \i in {1,2,3}
             \foreach \j in {1,2}
             \draw[-] (H-3\i) -- (O-\j);
 
-            % Labels
             \draw[<-] (hidden-label-1) -- (hidden-label-2);
             \draw[<-] (hidden-label-2) -- (hidden-label-3);
 
@@ -818,7 +796,7 @@ Lets define a network with three neuerons, $h_1, h_2, h_3$, each of which get th
 
 
 
-            % Connections: inputs to hidden
+        
             \draw[->] (x1) -- (h1) node[midway, sloped, above] {$w_{1,1}$};
             \draw[->] (x2) -- (h1) node[midway, sloped, below] {$w_{1,2}$};
 
@@ -842,7 +820,7 @@ Lets define a network with three neuerons, $h_1, h_2, h_3$, each of which get th
 
 
 
-            % Connections: inputs to hidden
+           
             \draw[->] (x1) -- (h2) node[midway, sloped, above] {$w_{2,1}$};
             \draw[->] (x2) -- (h2) node[midway, sloped, below] {$w_{2,2}$};
 
@@ -867,7 +845,7 @@ Lets define a network with three neuerons, $h_1, h_2, h_3$, each of which get th
 
 
 
-            % Connections: inputs to hidden
+         
             \draw[->] (x1) -- (h3) node[midway, sloped, above] {$w_{3,1}$};
             \draw[->] (x2) -- (h3) node[midway, sloped, below] {$w_{3,2}$};
 
@@ -913,9 +891,6 @@ This is the essence of a forward pass, we've desribed a network of two input neu
             \node[draw, circle, minimum size=0.8cm] (h2) at (2,0) {$h_2$};
             \node[draw, circle, minimum size=0.8cm] (h3) at (2,-1) {$h_3$};
 
-
-
-            % Connections: inputs to hidden
             \draw[->] (x-1) -- (h1);
             \draw[->] (x-1) -- (h2);
             \draw[->] (x-1) -- (h3);
@@ -935,7 +910,7 @@ This is the essence of a forward pass, we've desribed a network of two input neu
     \begin{subfigure}[b]{0.64\textwidth}
         \centering
         \begin{tikzpicture}[baseline=(current bounding box.center), node distance=0.1cm ]
-            % Create the matrix of weight nodes with annotations
+        
             \matrix (m) [matrix of math nodes,
             left delimiter={[}, right delimiter={]}]
                 {
@@ -944,7 +919,7 @@ This is the essence of a forward pass, we've desribed a network of two input neu
                     w_{31} & w_{32} \\
                 };
 
-            % Braces for the weights corresponding to x_1 and x_2
+         
             \draw [decorate,decoration={brace,amplitude=5pt}]
             ($(m-1-1.west)+(0,0.2)$) -- ($(m-1-1.east)+(0,0.2)$)
             node[midway, above, yshift=0.5em]{\scriptsize Weights of $x_1$};
@@ -963,7 +938,7 @@ This is the essence of a forward pass, we've desribed a network of two input neu
             ($(m-3-1.west)+(-0.4, 0)$) -- ($(m-3-1.west)+(-0.6, 0)$)
             node[midway, left=0.1cm] {\scriptsize $h_3$ weights};
 
-            % Nodes for the computation on the right of the weight matrix
+        
             \node (mult) [right= of m] {$\cdot$};
             \node (input) [right=-0.2cm of mult] {$\begin{bmatrix} x_1 \\ x_2 \end{bmatrix}$};
             \node (plus) [right=-0.2cm of input] {$+$};
@@ -980,9 +955,13 @@ This is the essence of a forward pass, we've desribed a network of two input neu
     \caption{Representation of the forward pass}
 \end{figure}
 
+\pagebreak
+\section{References}
+\bibliographystyle{plain} 
+\bibliography{references} 
 
 \pagebreak
-\section{TO DO}
+\section*{TO DO}
 \scriptsize
 \begin{itemize}
     \item Current Section
@@ -1059,10 +1038,7 @@ This is the essence of a forward pass, we've desribed a network of two input neu
 \end{itemize}
 
 
-\pagebreak
 
-\bibliographystyle{plain} % Choose a style (plain, IEEEtran, etc.)
-\bibliography{references} % Ensure this matches your .bib file name
 
 \end{document}
 
