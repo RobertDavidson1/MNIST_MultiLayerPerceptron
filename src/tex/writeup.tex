@@ -20,7 +20,7 @@
 \usepackage{caption}
 \usepackage{subcaption}
 \usepackage{changepage}
-\usetikzlibrary{decorations.pathreplacing}
+\usetikzlibrary{decorations.pathreplacing, matrix, calc, positioning}
 
 % -- THEOREM ENVIRONMENTS --
 \theoremstyle{plain}
@@ -45,7 +45,7 @@
 
 \begin{center}
     Mathematical Analysis of Multilayer Perceptron Training\\
-    Independent Study\\[24pt]
+    Independent / Self Study\\[24pt]
     \LARGE
 
     \Large
@@ -292,138 +292,94 @@ The perceptron, proposed by Frank Rosenblatt in 1958 \cite{rosenblatt_perceptron
 \section{Artificial Neurons}
 
 \subsection{Mathematical Representation}
-As we discussed, biological neurons receive multiple weighted
-signals and fire when the combined input surpasses a threshold.
-In the artificial neuron, we mathematically represent this process as follows:
-
-\subsubsection{Inputs and Weights as Vectors}
-We need some way to represent the list of inputs signals to the A.N (artificial neuron).
-We can do this by using a vector, which is a mathematical object that represents a list of numbers.
-$$\mathbf{x} = \begin{bmatrix} x_1 \\ x_2 \\ \vdots \\ x_n \end{bmatrix}$$
-where each $x_i$ represents an individual input signal. \\
-Similarly, the weights associated with each input are also represented as a weight vector:
-$$\mathbf{w} = \begin{bmatrix} w_1 \\ w_2 \\ \vdots \\ w_n \end{bmatrix}$$
-Each weight $w_i$ corresponds to the input $x_i$ and represents the
-strength of that input's connection to the neuron - analogous to synaptic strength
-in a biological neuron. A larger magnitude of $w_i$ indicates a stronger
-influence of $x_i$ on the neurons output.
-
-
-\subsubsection{Weighted Sum}
-
-The neuron calculates a weighted sum of its inputs, analogous to the combined signals
-reaching the soma of a biological neuron. This summation, denoted as $z$, is defined as:
-\begin{align*}
-    z & = w_1 x_1 + w_2 x_2 + \ldots + w_n x_n + b \\
-      & = \sum_{i=1}^{n} w_i x_i + b
-\end{align*}
-
-\subsubsection{Activation Function and the Bias Term}
-To determine the output of the artificial neuron, we use an activation function.
-Analogous to the threshold firing of a biological neuron, the activation function, denoted $\phi$,
-decides whether the neuron should fire based on the weighted sum of its inputs,
-z. In the artificial neuron, we use a simple step function as the activation function: \\
-\begin{minipage}{0.49\textwidth}
-    $$y = \begin{cases}
-            1 & \text{if } z \geq 0 \\
-            0 & \text{if } z < 0
-        \end{cases}$$
-\end{minipage}
-\begin{minipage}{0.5\textwidth}
-    \centering
-    \begin{tikzpicture}[scale=0.8]
-        % Define axes
-        \draw[->] (-2.5,0) -- (2.5,0) node[right] {$z$};
-        \draw[->] (0,0) -- (0,1.5) node[above] {$y$};
-
-        % Draw step function
-        \draw[very thick, black] (-2.5,0) -- (0,0);
-        \draw[very thick, black] (0,1) -- (2.5,1);
-        \draw[fill=blue] (0,0) circle (0.06);
-        \draw[fill=white] (0,1) circle (0.06);
-
-        % Threshold marker - now at zero, representing z+b=0
-        \draw[dashed, ultra thick] (0,0) -- (0,1);
-        \node at (0,-0.4) {$0$}; % Threshold is now zero for z+b
-
-        % Labels
-        \node at (1.5,1.4) {$y = 1$};
-        \node at (-1.5,0.4) {$y = 0$};
-    \end{tikzpicture}
-\end{minipage}
-Although, in practice we often use a different activation function, such as the sigmoid or ReLU function,
-the step function is a good starting point for understanding the basic concept of an activation function.\\
-The bias term, b, is introduced to shift the activation threshold. Biologically,
-this is analogous to the neuron's resting membrane potential, which influences how easily
-the neuron will fire.
+To represent the artificial neueron, we'll start with an example, two inputs $x_1$ and $x_2$ into a neueron $h_1$.
 \begin{figure}[h]
     \centering
-    \begin{subfigure}[b]{0.28\textwidth}
-        \begin{tikzpicture}[scale=0.6]
-            % Axes
-            % Define axes
-            \draw[->] (-2.5,0) -- (2.5,0) node[right] {$z$};
-            \draw[->] (0,0) -- (0,1.5) node[above] {$y$};
+    \begin{tikzpicture}[>=stealth, node distance=2.5cm, auto, scale=0.8]
 
-            % Draw step function
-            \draw[very thick, black] (-2.5,0) -- (0,0);
-            \draw[very thick, black] (0,1) -- (2.5,1);
-            \draw[fill=blue] (0,0) circle (0.06);
-            \draw[fill=white] (0,1) circle (0.06);
+        % Draw the two input variables and the bias term
 
+        \node[draw, circle, minimum size=0.8cm] (x1) at (0,1) {$x_1$};
+        \node[draw, circle, minimum size=0.8cm] (x2) at (0,-1) {$x_2$};
 
-            \draw[dashed, ultra thick] (0,0) -- (0,1);
-            \node at (0,-0.4) {$0$};
+        % Draw the summation 
+        \node[draw, circle, minimum size=0.8cm] (p) at (3,0) {$h_1$};
 
-            % Labels
-            \node at (1.5,1.4) {$y = 1$};
-            \node at (-2,0.4) {$y = 0$};
-            \node at (0,3) {Bias $= 0$};
+        % Arrows connecting inputs to weights
+
+        \draw[-] (x1) -- (p) node[midway, sloped, above] {$w_1$};
+        \draw[-] (x2) -- (p) node[midway, sloped, below] {$w_2$};
+    \end{tikzpicture}
+\end{figure} \\
+\textbf{Finding the total input} $\mathbf{(z)}$\\[2ex]
+We could do this by adding up each input multiplied by its weight - indicating how important it is..
+$$z = w_1 \cdot x_1 + w_2 \cdot x_2$$
+To make this easier for us, we could represent the weights and inputs as vectors:
+$$\mathbf{w} = \begin{bmatrix} w_1 \\ w_2 \end{bmatrix} \quad \text{and} \quad \mathbf{x} = \begin{bmatrix} x_1 \\ x_2 \end{bmatrix}$$
+We then see then see that we can write:
+$$z = [w_1, w_2] \cdot \begin{bmatrix} x_1 \\ x_2 \end{bmatrix} = w_1 \cdot x_1 + w_2 \cdot x_2$$
+We can see that $[w_1, w_2]$ is just out weights vector transposed. We can write this as:
+$$z = \mathbf{w}^T \mathbf{x}$$
+\textbf{Applying the Activation Function} $\boldsymbol{(\phi)}$\\[2ex]
+We introduce the Heaviside step activation function – which is like an on-off switch. If the total input is greater than $0$, the neuron fires; otherwise it doesn't.
+\begin{figure}[h]
+    \centering
+    \begin{subfigure}[c]{0.49\textwidth}
+        \centering
+        $$\phi(z) = \begin{cases}
+                1 & \text{if } z \geq 0 \\
+                0 & \text{if } z < 0
+            \end{cases}
+        $$
+    \end{subfigure}
+    \begin{subfigure}[c]{0.5\textwidth}
+        \centering
+        \begin{tikzpicture}[scale = 0.6]
+            \draw[-] (-1.5,0) -- (1.5,0) node[right] {$z$};
+            \draw[very thick] (-1.5,0) -- (0,0);
+            \draw[very thick] (0,1) -- (1.5,1);
+            \draw[dashed] (0,-0.4) -- (0,1.4);
+            \node at (1.5,1) [right] {1};
+            \node at (-1.5,0) [left] {0};
+            \node at (0,-0.4) [below] {$z = 1$};
+            \node at (0,1.4) [above] {$\phi(z)$};
         \end{tikzpicture}
     \end{subfigure}
-    \begin{subfigure}[b]{0.28\textwidth}
-        \begin{tikzpicture}[scale=0.6]
-            % Define axes
-            \draw[->] (-2.5,0) -- (2.5,0) node[right] {$z$};
-            \draw[->] (0,0) -- (0,1.5) node[above] {$y$};
-
-            % Draw step function
-            \draw[very thick, black] (-2.5,0) -- (-1,0);
-            \draw[very thick, black] (-1,1) -- (2.5,1);
-            \draw[fill=black] (-1,0) circle (0.06);
-            \draw[fill=white] (-1,1) circle (0.06);
-
-
-            \draw[dashed, ultra thick] (-1,0) -- (-1,1);
-            \node at (-1,-0.4) {$-1$};
-            % Labels
-            \node at (1.5,1.4) {$y = 1$};
-            \node at (-2,0.4) {$y = 0$};
-            \node at (0,3) {Bias $= +1$};
+    \caption{The Heaviside step function}
+\end{figure} \\
+\textbf{Introducing the bias} $\boldsymbol{(b)}$\\[2ex]
+What is we want to change how much of a total input it takes for a neuron to fire? We can introduce a bias term $b$ to the total input:
+$$z = \mathbf{w}^T \mathbf{x} + b$$
+This allows us to shift the total input by an amount $b$. Which makes the activation function look like:
+\begin{figure}[h]
+    \centering
+    \begin{subfigure}[t]{0.49\textwidth}
+        \centering
+        \begin{tikzpicture}[scale = 0.7]
+            \draw[-] (0,-0.4) -- (0,1.5) node[above] {$\phi(z)$};
+            \draw[-] (-1.5,0) -- (1.5,0) node[right] {$z$};
+            \draw[very thick] (-1.5,0) -- (-0.5,0);
+            \draw[very thick] (-0.5,1) -- (1.5,1);
+            \draw[dashed] (-0.5,-0.4) -- (-0.5,1.4);
+            \node at (1.5,1) [right] {1};
+            \node at (-1.5,0) [left] {0};
         \end{tikzpicture}
+        \caption{$b = 0.5$}
     \end{subfigure}
-    \begin{subfigure}[b]{0.28\textwidth}
-        \begin{tikzpicture}[scale=0.6]
-            % Define axes
-            \draw[->] (-2.5,0) -- (2.5,0) node[right] {$z$};
-            \draw[->] (0,0) -- (0,1.5) node[above] {$y$};
-
-            % Draw step function
-            \draw[very thick, black] (-2.5,0) -- (1,0);
-            \draw[very thick, black] (1,1) -- (2.5,1);
-            \draw[fill=black] (1,0) circle (0.06);
-            \draw[fill=white] (1,1) circle (0.06);
-
-
-            \draw[dashed, ultra thick] (1,0) -- (1,1);
-            \node at (1,-0.4) {$1$};
-
-            % Labels
-            \node at (1.5,1.4) {$y = 1$};
-            \node at (-2,0.4) {$y = 0$};
-            \node at (0,3) {Bias $= -1$};
+    \begin{subfigure}[t]{0.49\textwidth}
+        \centering
+        \begin{tikzpicture}[scale = 0.7]
+            \draw[-] (0,-0.4) -- (0,1.5) node[above] {$\phi(z)$};
+            \draw[-] (-1.5,0) -- (1.5,0) node[right] {$z$};
+            \draw[very thick] (-1.5,0) -- (0.5,0);
+            \draw[very thick] (0.5,1) -- (1.5,1);
+            \draw[dashed] (0.5,-0.4) -- (0.5,1.4);
+            \node at (1.5,1) [right] {1};
+            \node at (-1.5,0) [left] {0};
         \end{tikzpicture}
+        \caption{$b = -0.5$}
     \end{subfigure}
+    \caption{The effect of the bias term on the activation function}
 \end{figure}
 
 \pagebreak
@@ -480,7 +436,8 @@ This is exactly the problem the artificial neuron helps solve. It learns to draw
 Lets define the two inputs to our neueron as:
 $$x_1 = \text{number of spots} \quad \text{and} \quad x_2 = \text{length of the stem}$$
 The artificial neueron then forms a linear combination of these inputs:
-$$z = \sum_{i=1}^{2} w_i x_i + b = w_1 x_1 + w_2 x_2 + b$$
+$$z = \sum_{i=1}^{2} w_i x_i + b = w_1 x_1 + w_2 x_2 + b \Rightarrow z = \mathbf{w}^T \mathbf{x} + \mathbb{b}$$
+
 where our weights scale the importance of each input.
 The neueron then decides whether the mushroom is poisonous or not:
 $$
@@ -629,7 +586,10 @@ where, $y = 1$ means the mushroom is poisonous, and $y = 0$ means it is safe to 
 \end{figure}
 We refer to this line as the decision boundary, as it separates the two classes of mushrooms. We now have a simple model, that given the number of spots and the length of the stem, can predict whether a mushroom is poisonous or safe to eat. This is the essence of what an artificial neuron does - it learns to draw decision boundaries in the input space to separate different classes of data.
 
+In essence, an artificial neuron integrates multiple inputs by scaling them with weights, adds a bias to adjust the activation threshold, and passes the resulting sum through a non-linear activation function. Its learning process—driven by error correction—enables it to modify its parameters to better approximate the desired output. This rigorous yet intuitive framework is the cornerstone of more complex neural network architectures.
+
 \pagebreak
+
 
 \section{A Layer of Neurons}
 \subsection{Recap of the Single Neuron and Intro to Layers}
@@ -699,7 +659,7 @@ Returning to the chef analogy: the chef might hire two sous-chefs. One sous-chef
                 \node[draw, circle, minimum size=1cm] (N2) at (2,-1) {$N_2$};
 
                 \node[align=left] at (4,2) {Output \\ \; layer};
-                \node[draw, circle, minimum size=1cm] (Nout) at (4,0) {$N_{\text{out}}$};
+                \node[draw, circle, minimum size=1cm] (Nout) at (4,0) {$N_{\mathrm{out}}$};
 
                 % Connections: inputs to hidden
                 \draw[->] (S) -- (N1);
@@ -783,12 +743,13 @@ One way to overcome these limitations is to chain mutliple layers of neuerons so
 
             \node[layer] (input-label) at (0,2.5) {Input \\ Layer};
             \draw [decorate,decoration={brace,amplitude=5pt}]
-            (2,1.5) -- (6,1.5) node[midway, above, yshift=0.5em]{\scriptsize Hidden Layers};
+            (2,1.25) -- (6,1.25) node[midway, above, yshift=0.5em]{\scriptsize Hidden Layers};
             \node[layer] (output-label) at (8,1) {Output \\ Layer};
 
             \node[layer] (hidden-label-1) at (2,-2.5) {Simple \\ Edges};
             \node[layer] (hidden-label-2) at (4,-2.5) {Cornes or \\Textures};
             \node[layer] (hidden-label-3) at (6,-2.5) {Ear  or\\ Nose};
+
 
 
             % Input layer nodes
@@ -843,86 +804,264 @@ One way to overcome these limitations is to chain mutliple layers of neuerons so
     \caption{A deep neural network for image recognition}
 \end{figure}
 When we talk about hidden layers, we refer to the layers of nuerons between the input and output layers. These layers are called hidden because we don't directly observe their ouputs, but rather they are intermediate processing steps. Networks with one more more hidden layers are often called multi-layer perceptrons (MLPs). The more layers we add, the deeper the network becomes, and the more complex patterns it can learn - at a cost of more computational resources and longer training times.
-\subsection{Forward Pass : The Flow of Information}
-The forward pass is the process by which we transform raw inputs step by step through each layer until we produce a final output.\\
-Revisiting our chef's examples, where the inputs may be spiciness ($S$) and sweetness ($W$). In the first hidden layer, each neuron does the following:\\[2ex]
-\textbf{Weighted Sum}
 
-% \section{|UNCOMPLETE PAST THIS | Beyond the single-unit perceptrons}
-% \subsection{From a Neuron to a Perceptron Layer}
+\pagebreak
+
+\subsection{The Forward Pass : The journey from input to output}
+Lets define a network with three neuerons, $h_1, h_2, h_3$, each of which get the same inputs, $x_1, x_2$ \\[4ex]
+\begin{minipage}{0.3\textwidth}
+    \begin{center}
+        \begin{tikzpicture}[>=stealth, node distance=2cm, scale=0.8, transform shape]
+
+            \node[draw, circle, minimum size=0.7cm] (x1) at (0,0.8) {$x_1$};
+            \node[draw, circle, minimum size=0.7cm] (x2) at (0,-0.8) {$x_2$};
 
 
-
-
-% \subsection{Multilayer Perceptrons}
-
-% \section{Activation Functions for Deeper Networks}
-% \subsection{Common Activations}
-% sigmoid, tanh, ReLU, Leaky ReLU
-% pros/cons, relus simplicity, sigmoids tendence to saturate, tanh zero centered, leaky relu to prevent dying neurons
-
-% \subsection{When/where to use each}
-% provide typical guidlanes, relu for hidden layers, tanh for output, leaky relu for deeper networks, softmax for multiclass classification
-% \section{Forward Propogation}
-% \subsection{Matrix Vector Notation}
-% show how each layers output is computer: $z^(l) = W^(l)a^(l-1) + b^(l)$ and $a^(l) = \phi(z^(l))$
-% emphasis on vectorization for efficiency
-% emphasise how this extends to multiple layers
-% \section{Cost Functions and Error Metrics}
-
-% \subsection{choice of cost function}
-% Mean Squared Error, Cross Entropy
-% explain the difference between the two, i.e. MSE for regression, cross entropy for classification
-% \subsection{Error Backpropogation}
-% how the network distributes the error back through the network
-% deriving partial derivaties for weights and biases at each layer
-% \section{Backpropogation}
-% \subsection{Gradient Computation}
-% derivaties of common activation functions
-% chain rule application from output layer back to input layer
-% \subsection{Update rules}
-% how to update weights and biases using the computed gradients
-% the role of the learning rate
-
-% \section{Optimization and Training}
-% \subsection{Batch Based Methods}
-% Stochastic Gradient Descent, Mini Batch Gradient Descent
-% Explain the difference between the two, i.e. SGD for noisy data, Mini Batch for more stable convergence
-
-% \subsection{Improving convergence}
-% Momentum, RMSProp, Adam
-% Explain the role of each, i.e. momentum to prevent oscillations, RMSProp to adjust learning rates, Adam as a combination of the two
-% Explanation of the hyperparameters for each optimization method
+            \node[draw, circle, minimum size=0.7cm] (h1) at (2,0) {$h_1$};
 
 
 
-% \section{Regularization}
-% \subsection{Overfitting and Underfitting}
-% Explain the concepts of overfitting and underfitting
-% Techniques to prevent overfitting, i.e. dropout, L1/L2 regularization, early stopping
+            % Connections: inputs to hidden
+            \draw[->] (x1) -- (h1) node[midway, sloped, above] {$w_{1,1}$};
+            \draw[->] (x2) -- (h1) node[midway, sloped, below] {$w_{1,2}$};
 
-% \subsection{Initalization}
-% Why naive (all zeros) initialization fails
-% Recommended schemes for initialization, i.e. Xavier, He
+        \end{tikzpicture}
 
-% \section{Building the Multilayer Perceptron for MNIST}
-% \begin{itemize}
-% \item Data input: Organize your data and labels
-% \item Network structure: define layers, number of
-% \item Forward Propogation: Implement the sequence of matrix multiplications, biases and activations
-% \item Loss calculation: e.g. cross entropy for classification tasks
-% \item Backpropogation: Compute gradients layer by layer
-% \item Weight updates: Incorporate an optimization method (SGD, Adam, etc)
-% \item Training loop: Shufflee data, iterate over epochs, track training and validation loss
-% \end{itemize}
+        \begin{align*}
+            z_1 & = w_{1,1}x_1 + w_{1,2}x_2 + b_1                                                                           \\
+            z_1 & = \begin{bmatrix} w_{1,1} \quad w_{1,2} \end{bmatrix}\cdot \begin{bmatrix} x_1 \\ x_2 \end{bmatrix} + b_1 \\
+        \end{align*}
+    \end{center}
+\end{minipage}
+\begin{minipage}{0.3\textwidth}
+    \begin{center}
+        \begin{tikzpicture}[>=stealth, node distance=2cm, scale=0.8, transform shape]
 
-% \section{Extensions and Next steps}
-% \subsection{Depper architectures}
-% convoulition nueral networks, recurrent neural networks, transformers
-% \subsection{Modern practices}
-% Batch normalization, advanced regularization, learning rate schedules
+            \node[draw, circle, minimum size=0.7cm] (x1) at (0,0.8) {$x_1$};
+            \node[draw, circle, minimum size=0.7cm] (x2) at (0,-0.8) {$x_2$};
 
-% 
+
+            \node[draw, circle, minimum size=0.7cm] (h2) at (2,0) {$h_2$};
+
+
+
+            % Connections: inputs to hidden
+            \draw[->] (x1) -- (h2) node[midway, sloped, above] {$w_{2,1}$};
+            \draw[->] (x2) -- (h2) node[midway, sloped, below] {$w_{2,2}$};
+
+
+        \end{tikzpicture}
+
+        \begin{align*}
+            z_2 & = w_{2,1}x_1 + w_{2,2}x_2 + b_2                                                                           \\
+            z_2 & = \begin{bmatrix} w_{2,1} \quad w_{2,2} \end{bmatrix}\cdot \begin{bmatrix} x_1 \\ x_2 \end{bmatrix} + b_2 \\
+        \end{align*}
+    \end{center}
+\end{minipage}
+\begin{minipage}{0.3\textwidth}
+    \begin{center}
+        \begin{tikzpicture}[>=stealth, node distance=2cm, scale=0.8, transform shape]
+
+            \node[draw, circle, minimum size=0.7cm] (x1) at (0,0.8) {$x_1$};
+            \node[draw, circle, minimum size=0.7cm] (x2) at (0,-0.8) {$x_2$};
+
+
+            \node[draw, circle, minimum size=0.7cm] (h3) at (2,0) {$h_3$};
+
+
+
+            % Connections: inputs to hidden
+            \draw[->] (x1) -- (h3) node[midway, sloped, above] {$w_{3,1}$};
+            \draw[->] (x2) -- (h3) node[midway, sloped, below] {$w_{3,2}$};
+
+        \end{tikzpicture}
+
+        \begin{align*}
+            z_3 & = w_{3,1}x_1 + w_{3,2}x_2 + b_3                                                                           \\
+            z_3 & = \begin{bmatrix} w_{3,1} \quad w_{3,2} \end{bmatrix}\cdot \begin{bmatrix} x_1 \\ x_2 \end{bmatrix} + b_3 \\
+        \end{align*}
+    \end{center}
+\end{minipage} \\
+Lets let the vector $\mathbf{z}$ represent the outputs of these neuerons:
+$$
+    \mathbf{z} =
+    \begin{bmatrix}
+        z_1 \\ z_2 \\ z_3
+    \end{bmatrix}
+    =
+    \begin{bmatrix}
+        w_{1,1} & w_{1,2} \\
+        w_{2,1} & w_{2,2} \\
+        w_{3,1} & w_{3,2} \\
+    \end{bmatrix} \cdot \begin{bmatrix}
+        x_1 \\ x_2
+    \end{bmatrix} +
+    \begin{bmatrix}
+        b_1 \\ b_2 \\ b_3
+    \end{bmatrix}
+$$
+This is the essence of a forward pass, we've desribed a network of two input neuerons and three hidden neuerons.
+
+\begin{figure}[h]
+    \centering
+    \begin{subfigure}[b]{0.35\textwidth}
+        \centering
+        \begin{tikzpicture}[>=stealth, node distance=2cm, scale=0.8, transform shape]
+            \node[align=left] at (0,2) {Input \\ \,layer};
+            \node[draw, circle, minimum size=0.8cm] (x-1) at (0,0.5) {$x_1$};
+            \node[draw, circle, minimum size=0.8cm] (x-2) at (0,-0.5) {$x_2$};
+
+            \node[align=left] at (2,2) {Hidden \\ \, layer};
+            \node[draw, circle, minimum size=0.8cm] (h1) at (2,1) {$h_1$};
+            \node[draw, circle, minimum size=0.8cm] (h2) at (2,0) {$h_2$};
+            \node[draw, circle, minimum size=0.8cm] (h3) at (2,-1) {$h_3$};
+
+
+
+            % Connections: inputs to hidden
+            \draw[->] (x-1) -- (h1);
+            \draw[->] (x-1) -- (h2);
+            \draw[->] (x-1) -- (h3);
+
+
+            \draw[->] (x-2) -- (h1);
+            \draw[->] (x-2) -- (h2);
+            \draw[->] (x-2) -- (h3);
+
+
+
+
+        \end{tikzpicture}
+
+        \subcaption{Architecture of the chef analogy}
+    \end{subfigure}
+    \begin{subfigure}[b]{0.64\textwidth}
+        \centering
+        \begin{tikzpicture}[baseline=(current bounding box.center), node distance=0.1cm ]
+            % Create the matrix of weight nodes with annotations
+            \matrix (m) [matrix of math nodes,
+            left delimiter={[}, right delimiter={]}]
+                {
+                    w_{11} & w_{12} \\
+                    w_{21} & w_{22} \\
+                    w_{31} & w_{32} \\
+                };
+
+            % Braces for the weights corresponding to x_1 and x_2
+            \draw [decorate,decoration={brace,amplitude=5pt}]
+            ($(m-1-1.west)+(0,0.2)$) -- ($(m-1-1.east)+(0,0.2)$)
+            node[midway, above, yshift=0.5em]{\scriptsize Weights of $x_1$};
+
+            \draw [decorate,decoration={brace,amplitude=5pt, mirror}]
+            ($(m-3-2.west)+(0,-0.2)$) -- ($(m-3-2.east)+(0,-0.2)$)
+            node[midway, below, yshift=-0.5em]{\scriptsize Weights of $x_2$};
+
+            \draw [<-]
+            ($(m-1-1.west)+(-0.4, 0)$) -- ($(m-1-1.west)+(-0.6, 0)$)
+            node[midway, left=0.1cm] {\scriptsize $h_1$ weights};
+            \draw [<-]
+            ($(m-2-1.west)+(-0.4, 0)$) -- ($(m-2-1.west)+(-0.6, 0)$)
+            node[midway, left=0.1cm] {\scriptsize $h_2$ weights};
+            \draw [<-]
+            ($(m-3-1.west)+(-0.4, 0)$) -- ($(m-3-1.west)+(-0.6, 0)$)
+            node[midway, left=0.1cm] {\scriptsize $h_3$ weights};
+
+            % Nodes for the computation on the right of the weight matrix
+            \node (mult) [right= of m] {$\cdot$};
+            \node (input) [right=-0.2cm of mult] {$\begin{bmatrix} x_1 \\ x_2 \end{bmatrix}$};
+            \node (plus) [right=-0.2cm of input] {$+$};
+            \node (bias) [right=-0.2cm of plus] {$\begin{bmatrix} b_1 \\ b_2 \\ b_3 \end{bmatrix}$};
+            \node (equal) [right=-0.2cm of bias] {$=$};
+            \node (zvec) [right=-0.2cm of equal] {$\begin{bmatrix} z_1 \\ z_2 \\ z_3 \end{bmatrix}$};
+
+            \draw[<-] ($(input) + (0,0.5)$)  -- ($(input) + (0,1)$) node [above] {\shortstack{\scriptsize input \\ \scriptsize vector}};
+            \draw[<-] ($(bias) + (0,0.7)$)  -- ($(bias) + (0,1)$) node [above] {\shortstack{\scriptsize bias \\ \scriptsize vector}};
+            \draw[<-] ($(zvec) + (0,0.7)$)  -- ($(zvec) + (0,1)$) node [above] {\shortstack{\scriptsize output \\ \scriptsize vector}};
+        \end{tikzpicture}
+        \subcaption{Matrix representation of the forward pass}
+    \end{subfigure}
+    \caption{Representation of the forward pass}
+\end{figure}
+
+
+\pagebreak
+\section{TO DO}
+\scriptsize
+\begin{itemize}
+    \item Current Section
+          \begin{itemize}
+              \item Finish the forward pass  sub section
+              \item Subsection on how  each layers output is compted $z^{(l)} = W^{(l)}a^{(l-1)} + b^{(l)}$ and $a^{(l)} = \phi(z^{(l)})$
+              \item emphasis on vectorization for efficiency
+              \item Subsection on cost functions and error metrics
+          \end{itemize}
+    \item New sub section on learning
+          \begin{itemize}
+              \item Summary of how we adjust weights
+              \item Backprop
+              \item Why we use smooth activation functions
+              \item discuss sigmoid, tanh, relu, leaky relu (pros cons - sigmoid staturation, tanh zero centered, relu simple, leaky relu to prevent dying neurons)
+              \item When to use each (typical guidlines - relu for hidden layers, tanh for output, leaky relu for deeper networks, softmax for multiclass classification)
+              \item  derivaties of common activation functions
+              \item chain rule application from output layer back to input layer
+              \item how to update weights and biases using the computed gradients
+              \item the role of the learning rate
+          \end{itemize}
+    \item Choice of cost function
+          \begin{itemize}
+              \item Mean Squared Error, Cross Entropy
+              \item explain the difference between the two, i.e. MSE for regression, cross entropy for classification
+          \end{itemize}
+
+    \item Error Backpropogation
+          \begin{itemize}
+              \item how the network distributes the error back through the network
+              \item deriving partial derivaties for weights and biases at each layer
+          \end{itemize}
+    \item Optimization and Training
+          \begin{itemize}
+              \item Batch Based Methods
+              \item Stochastic Gradient Descent, Mini Batch Gradient Descent
+              \item Explain the difference between the two, i.e. SGD for noisy data, Mini Batch for more stable convergence
+              \item Improving convergence
+              \item Momentum, RMSProp, Adam
+              \item Explain the role of each, i.e. momentum to prevent oscillations, RMSProp to adjust learning rates, Adam as a combination of the two
+              \item Explanation of the hyperparameters for each optimization method
+          \end{itemize}
+    \item Regularization
+          \begin{itemize}
+              \item Overfitting and Underfitting
+              \item Techniques to prevent overfitting, i.e. dropout, L1/L2 regularization, early stopping
+          \end{itemize}
+    \item Initalization
+          \begin{itemize}
+              \item Why naive (all zeros) initialization fails
+              \item Recommended schemes for initialization, i.e. Xavier, He
+          \end{itemize}
+    \item Building the Multilayer Perceptron for MNIST
+          \begin{itemize}
+              \item Data input: Organize your data and labels
+              \item Network structure: define layers, number of
+              \item Forward Propogation: Implement the sequence of matrix multiplications, biases and activations
+              \item Loss calculation: e.g. cross entropy for classification tasks
+              \item Backpropogation: Compute gradients layer by layer
+              \item Weight updates: Incorporate an optimization method (SGD, Adam, etc)
+              \item Training loop: Shufflee data, iterate over epochs, track training and validation loss
+          \end{itemize}
+    \item Extensions and Next steps
+          \begin{itemize}
+              \item Deeper architectures: convoulition nueral networks, recurrent neural networks, transformers
+              \item Modern practices: Batch normalization, advanced regularization, learning rate schedules
+          \end{itemize}
+    \item Modern Practices
+          \begin{itemize}
+              \item Batch Normalization
+              \item Advanced Regularization
+              \item Learning Rate Schedules
+          \end{itemize}
+\end{itemize}
+
+
 \pagebreak
 
 \bibliographystyle{plain} % Choose a style (plain, IEEEtran, etc.)
